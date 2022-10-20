@@ -5,22 +5,26 @@ const {KalmanFilter} = require('kalman-filter');
 const kf = new KalmanFilter();
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
+let Filename = `./kmou_dataset009`  // 읽을 파일 네임 ( -1,2 은 아래에서 수정)
+let DownName = `./kalman_dataset009` // 다운로드할 파일 네임 ( -1,2 는 아래에서 수정)
+
+
 A(2)  // 저장된 파일이 빈 csv파일일때, 해당번호 넣는것으로 변경
 
 
-async function makeCSV (results) {
-    let Rcsv = new ObjectsToCsv(results);
+// async function makeCSV (results) {
+//     let Rcsv = new ObjectsToCsv(results);
     
-    // Save to file:
-    await Rcsv.toDisk(`./kalman_dataset009-4.csv`,{allColumns: true});
+//     // Save to file:
+//     await Rcsv.toDisk(`./kalman_dataset009-4.csv`,{allColumns: true});
     
-    // Return the CSV file as string:
-    // console.log(await Rcsv.toString());
-    console.log("makeCSV 함수")
-};
+//     // Return the CSV file as string:
+//     // console.log(await Rcsv.toString());
+//     console.log("makeCSV 함수")
+// };
 
 async function A (num){
-let FILE_NAME = `kmou_dataset009-${num}.csv`
+let FILE_NAME = `./${Filename}-${num}.csv`
 let csvPath = path.join(__dirname,FILE_NAME);
 let csv = fs.readFileSync(csvPath,"utf-8")
 //let rows = csv.split("\r\n")
@@ -88,7 +92,7 @@ CSV(results,num)
 
 function CSV (data,i){
     const csvWriter = createCsvWriter({
-        path: `./kalman_dataset009-${i}.csv`,
+        path: `${DownName}-${i}.csv`,
         header : [
             {id:`MMSI`, title: "MMSI"},
             {id:"ShipName", title: "ShipName"},

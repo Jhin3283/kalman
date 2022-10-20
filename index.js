@@ -5,18 +5,26 @@ const {KalmanFilter} = require('kalman-filter');
 const kf = new KalmanFilter();
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-async function makeCSV (results) {
-    let Rcsv = new ObjectsToCsv(results);
+let Filename = `./kmou_dataset009`
+let DownName = `./kalman_dataset009`
+
+
+for(let i=1; i<=7; i++){
+    A(i)
+}
+
+// async function makeCSV (results) {
+//     let Rcsv = new ObjectsToCsv(results);
     
-    // Save to file:
-    await Rcsv.toDisk(`./kalman_dataset009-4.csv`,{allColumns: true});
+//     // Save to file:
+//     await Rcsv.toDisk(`./kalman_dataset009-4.csv`,{allColumns: true});
     
-    // Return the CSV file as string:
-    // console.log(await Rcsv.toString());
-    console.log("makeCSV 함수")
-};
+//     // Return the CSV file as string:
+//     // console.log(await Rcsv.toString());
+//     console.log("makeCSV 함수")
+// };
 async function A (num){
-let FILE_NAME = `kmou_dataset009-${num}.csv`
+let FILE_NAME = `${Filename}-${num}.csv`
 let csvPath = path.join(__dirname,FILE_NAME);
 let csv = fs.readFileSync(csvPath,"utf-8")
 let rows = csv.split("\r\n")
@@ -83,13 +91,11 @@ console.log(`Kalman ${FILE_NAME} ... done`)
 CSV(results,num)
 
 }
-for(let i=1; i<=7; i++){
-    A(i)
-}
+
 
 function CSV (data,i){
     const csvWriter = createCsvWriter({
-        path: `./kalman_dataset009-${i}.csv`,
+        path: `${DownName}-${i}.csv`,
         header : [
             {id:`MMSI`, title: "MMSI"},
             {id:"ShipName", title: "ShipName"},
