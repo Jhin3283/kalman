@@ -19,6 +19,7 @@
   "homepage": "https://github.com/Jhin3283/kalman#readme",
   "dependencies": {
     "csv": "^6.2.1",
+    "csv-writer": "^1.6.0",
     "dotenv": "^16.0.3",
     "kalman-filter": "^1.11.0",
     "mysql2": "^2.3.3",
