@@ -5,11 +5,12 @@ const {KalmanFilter} = require('kalman-filter');
 const kf = new KalmanFilter();
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-let Filename = `./kmou_dataset009`  // 읽을 파일 네임 ( -1,2 은 아래에서 수정)
-let DownName = `./kalman_dataset009` // 다운로드할 파일 네임 ( -1,2 는 아래에서 수정)
+let Dir = `../kmou_003`
+let Filename = `/kmou_dataset003`  // 읽을 파일 네임 ( -1,2 은 아래에서 수정)
+let DownName = `/kalman_dataset003` // 다운로드할 파일 네임 ( -1,2 는 아래에서 수정)
+let SaveDir = `../kmou_003_filter`
 
-
-A(2)  // 저장된 파일이 빈 csv파일일때, 해당번호 넣는것으로 변경
+A(3)  // 저장된 파일이 빈 csv파일일때, 해당번호 넣는것으로 변경
 
 
 // async function makeCSV (results) {
@@ -24,13 +25,14 @@ A(2)  // 저장된 파일이 빈 csv파일일때, 해당번호 넣는것으로 �
 // };
 
 async function A (num){
-let FILE_NAME = `./${Filename}-${num}.csv`
+let FILE_NAME = `${Dir}${Filename}-${num}.csv`
 let csvPath = path.join(__dirname,FILE_NAME);
 let csv = fs.readFileSync(csvPath,"utf-8")
-//let rows = csv.split("\r\n")
+let rows = csv.split("\r\n")
+
 // 저장된 파일이 빈 csv파일일때, 아래것으로 실행
 
-let rows = csv.split("\n")
+// let rows = csv.split("\n")
 
 if(rows[rows.length - 1] === ''){
     
@@ -48,9 +50,9 @@ for (const i in rows){
     } else {
         let row_data = {}
         for (const index in columnTitle) {
-            const title = String(columnTitle[index])
+            
             if(index === "1" || index === "2" || index === "3"){
-            row_data[title] = data[index]
+                row_data[title] = data[index]
             } else {
             row_data[title] = Number(data[index])
             }
@@ -84,6 +86,7 @@ for (let i in results){
     results[i].Temperature = Temperature_data[i][0]
     results[i].Humidity = Humidity_data[i][0]
 }
+console.log(results.slice(0,5))
 // await makeCSV(results)
 console.log(`Kalman ${FILE_NAME} ... done`)
 CSV(results,num)
@@ -92,9 +95,9 @@ CSV(results,num)
 
 function CSV (data,i){
     const csvWriter = createCsvWriter({
-        path: `${DownName}-${i}.csv`,
+        path: `${SaveDir}${DownName}-${i}.csv`,
         header : [
-            {id:`MMSI`, title: "MMSI"},
+            {id:"MMSI", title: "MMSI"},
             {id:"ShipName", title: "ShipName"},
             {id:"DataInfo", title: "DataInfo"},
             {id:"x", title: "x"},

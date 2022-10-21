@@ -5,11 +5,12 @@ const {KalmanFilter} = require('kalman-filter');
 const kf = new KalmanFilter();
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-let Filename = `./kmou_dataset009`
-let DownName = `./kalman_dataset009`
+let Dir = `./kmou_003`
+let Filename = `/kmou_dataset003`
+let DownName = `/kalman_dataset003`
+let SaveDir = `./kmou_003_filter`
 
-
-for(let i=1; i<=7; i++){
+for(let i=0; i<=20; i++){
     A(i)
 }
 
@@ -24,7 +25,7 @@ for(let i=1; i<=7; i++){
 //     console.log("makeCSV 함수")
 // };
 async function A (num){
-let FILE_NAME = `${Filename}-${num}.csv`
+let FILE_NAME = `${Dir}${Filename}_${num}.csv`
 let csvPath = path.join(__dirname,FILE_NAME);
 let csv = fs.readFileSync(csvPath,"utf-8")
 let rows = csv.split("\r\n")
@@ -49,8 +50,9 @@ for (const i in rows){
     } else {
         let row_data = {}
         for (const index in columnTitle) {
-            const title = String(columnTitle[index])
-            if(index === "1" || index === "2" || index === "3"){
+            changeString = columnTitle[index].replace(/ /g, "_").trim()
+            const title = changeString.trim()
+            if(index === "1" || index === "2"){
             row_data[title] = data[index]
             } else {
             row_data[title] = Number(data[index])
@@ -58,19 +60,20 @@ for (const i in rows){
             //row_data[title] = 1
         }
         results.push(row_data)
+        console.log(results)
     }
 }
-let Overall_data = []; 
+let A_data = []; 
 for(let e in results ){
-    Overall_data.push(results[e].Overall)
+    A_data.push(results[e].Tachometer)
 }
-let Temperature_data = []; 
+let B_data = []; 
 for(let e in results ){
-    Temperature_data.push(results[e].Temperature)
+    B_data.push(results[e].x)
 }
-let Humidity_data = []; 
+let C_data = []; 
 for(let e in results ){
-    Humidity_data.push(results[e].Humidity)
+    C_data.push(results[e].Humidity)
 }
 Overall_data = kf.filterAll(Overall_data)
 Temperature_data = kf.filterAll(Temperature_data)
@@ -85,19 +88,18 @@ for (let i in results){
     results[i].Temperature = Temperature_data[i][0]
     results[i].Humidity = Humidity_data[i][0]
 }
-console.log(results.slice(0,5))
 // await makeCSV(results)
 console.log(`Kalman ${FILE_NAME} ... done`)
-CSV(results,num)
+// CSV(results,num)
 
 }
 
 
 function CSV (data,i){
     const csvWriter = createCsvWriter({
-        path: `${DownName}-${i}.csv`,
+        path: `${SaveDir}${DownName}-${i}.csv`,
         header : [
-            {id:`MMSI`, title: "MMSI"},
+            {id:"MMSI", title: "MMSI"},
             {id:"ShipName", title: "ShipName"},
             {id:"DataInfo", title: "DataInfo"},
             {id:"x", title: "x"},
