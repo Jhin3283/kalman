@@ -5,10 +5,10 @@ const {KalmanFilter} = require('kalman-filter');
 const kf = new KalmanFilter();
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
-let Dir = `./kmou_009`
-let Filename = `/kmou_dataset009`
-let DownName = `/kalman_dataset009`
-let SaveDir = `./kmou_009_filter`
+let Dir = `./kmou_003`
+let Filename = `/kmou_dataset003`
+let DownName = `/kalman_dataset003`
+let SaveDir = `./kmou_003_filter`
 
 for(let i=1; i<=1; i++){
     new Promise((resolve, reject) => {
@@ -32,7 +32,7 @@ for(let i=1; i<=1; i++){
 //     console.log("makeCSV 함수")
 // };
 async function A (num){
-let FILE_NAME = `${Dir}${Filename}-${num}.csv`
+let FILE_NAME = `${Dir}${Filename}_${num}.csv`
 //let FILE_NAME = `${Dir}${Filename}_${num}.csv`
 let csvPath = path.join(__dirname,FILE_NAME);
 let csv = fs.readFileSync(csvPath,"utf-8")
@@ -59,7 +59,7 @@ for (const i in rows){
         for (const index in columnTitle) {
             changeString = columnTitle[index].replace(/ /g, "_").replace(/-/g,"_").trim()
             const title = changeString.trim()
-            if(index === "1" || index === "2" || index === "3" ){
+            if(index === "1" || index === "2" ){
             row_data[title] = data[index]
             } else {
             row_data[title] = Number(data[index])
@@ -71,66 +71,66 @@ for (const i in rows){
 }
 console.log(results)
 
-let A_data = [];
-for(let e in results ){
-    A_data.push(results[e].x)
-}
-let B_data = []; 
-for(let e in results ){
-    B_data.push(results[e].y)
-}
-let C_data = []; 
-for(let e in results ){
-    C_data.push(results[e].z)
-}
-
 // let A_data = [];
 // for(let e in results ){
-//     A_data.push(results[e].Tachometer)
+//     A_data.push(results[e].x)
 // }
 // let B_data = []; 
 // for(let e in results ){
-//     B_data.push(results[e].Engine_body_vibration_at_fore_top_longitudinal_direction)
+//     B_data.push(results[e].y)
 // }
 // let C_data = []; 
 // for(let e in results ){
-//     C_data.push(results[e].Engine_body_vibration_at_fore_top_transverse_direction)
-// }
-// let D_data = []; 
-// for(let e in results ){
-//     D_data.push(results[e].Engine_body_vibration_at_fore_top_vertical_direction)
-// }
-// let E_data = []; 
-// for(let e in results ){
-//     E_data.push(results[e].Engine_body_vibration_at_aft_top_transverse_direction)
+//     C_data.push(results[e].z)
 // }
 
-A_data = kf.filterAll(A_data)
-B_data = kf.filterAll(B_data)
-C_data = kf.filterAll(C_data)
+let A_data = [];
+for(let e in results ){
+    A_data.push(results[e].Tachometer)
+}
+let B_data = []; 
+for(let e in results ){
+    B_data.push(results[e].Engine_body_vibration_at_fore_top_longitudinal_direction)
+}
+let C_data = []; 
+for(let e in results ){
+    C_data.push(results[e].Engine_body_vibration_at_fore_top_transverse_direction)
+}
+let D_data = []; 
+for(let e in results ){
+    D_data.push(results[e].Engine_body_vibration_at_fore_top_vertical_direction)
+}
+let E_data = []; 
+for(let e in results ){
+    E_data.push(results[e].Engine_body_vibration_at_aft_top_transverse_direction)
+}
 
 // A_data = kf.filterAll(A_data)
 // B_data = kf.filterAll(B_data)
 // C_data = kf.filterAll(C_data)
-// D_data = kf.filterAll(D_data)
-// E_data = kf.filterAll(E_data)
+
+A_data = kf.filterAll(A_data)
+B_data = kf.filterAll(B_data)
+C_data = kf.filterAll(C_data)
+D_data = kf.filterAll(D_data)
+E_data = kf.filterAll(E_data)
 
 // let recursion = 0
 // results.map((e) =>{
     
 
-// for (let i in results){
-//     results[i].Tachometer = A_data[i][0]
-//     results[i].Engine_body_vibration_at_fore_top_longitudinal_direction = B_data[i][0]
-//     results[i].Engine_body_vibration_at_fore_top_transverse_direction = C_data[i][0]
-//     results[i].Engine_body_vibration_at_fore_top_vertical_direction = D_data[i][0]
-//     results[i].Engine_body_vibration_at_aft_top_transverse_direction = E_data[i][0]
-// }
 for (let i in results){
-    results[i].x = A_data[i][0]
-    results[i].y = B_data[i][0]
-    results[i].z = C_data[i][0]
+    results[i].Tachometer = A_data[i][0]
+    results[i].Engine_body_vibration_at_fore_top_longitudinal_direction = B_data[i][0]
+    results[i].Engine_body_vibration_at_fore_top_transverse_direction = C_data[i][0]
+    results[i].Engine_body_vibration_at_fore_top_vertical_direction = D_data[i][0]
+    results[i].Engine_body_vibration_at_aft_top_transverse_direction = E_data[i][0]
 }
+// for (let i in results){
+//     results[i].x = A_data[i][0]
+//     results[i].y = B_data[i][0]
+//     results[i].z = C_data[i][0]
+// }
 // console.log(results.slice(0,5))
 
 // // await makeCSV(results)
@@ -161,7 +161,7 @@ async function CSV (data,i){
     // .then(()=>{
     //     console.log("Save ... Done ")
     // })
-    let writeStream = fs.createWriteStream(`${SaveDir}${DownName}-${i}.csv`)
+    let writeStream = fs.createWriteStream(`${SaveDir}${DownName}_${i}.csv`)
     console.log(title)
 data.forEach((data, index) => {
     let newLine = []
@@ -172,8 +172,9 @@ data.forEach((data, index) => {
         })
     }else{
     for(let el in title){
-    console.log(data.title[el])
-    newLine.push(data[index][el])
+    let tit = title[el]
+    // console.log(data[tit])
+    newLine.push(data[tit])
     }
     writeStream.write(newLine.join(',')+ '\r\n', () => {
         // a line was written to stream
