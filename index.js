@@ -10,7 +10,7 @@ let Filename = `/kmou_dataset003`
 let DownName = `/kalman_dataset003`
 let SaveDir = `./kmou_003_filter`
 
-for(let i=1; i<=1; i++){
+for(let i=0; i<=138; i++){
     new Promise((resolve, reject) => {
         setTimeout(() => {
             A(i);
@@ -33,7 +33,7 @@ for(let i=1; i<=1; i++){
 // };
 async function A (num){
 let FILE_NAME = `${Dir}${Filename}_${num}.csv`
-//let FILE_NAME = `${Dir}${Filename}_${num}.csv`
+//let FILE_NAME = `${Dir}${Filename}-${num}.csv`
 let csvPath = path.join(__dirname,FILE_NAME);
 let csv = fs.readFileSync(csvPath,"utf-8")
 let rows = csv.split("\r\n")
@@ -86,23 +86,23 @@ console.log(results)
 
 let A_data = [];
 for(let e in results ){
-    A_data.push(results[e].Tachometer)
+    A_data.push(+results[e].Tachometer.toFixed(4))
 }
 let B_data = []; 
 for(let e in results ){
-    B_data.push(results[e].Engine_body_vibration_at_fore_top_longitudinal_direction)
+    B_data.push(+results[e].Engine_body_vibration_at_fore_top_longitudinal_direction.toFixed(8))
 }
 let C_data = []; 
 for(let e in results ){
-    C_data.push(results[e].Engine_body_vibration_at_fore_top_transverse_direction)
+    C_data.push(+results[e].Engine_body_vibration_at_fore_top_transverse_direction.toFixed(8))
 }
 let D_data = []; 
 for(let e in results ){
-    D_data.push(results[e].Engine_body_vibration_at_fore_top_vertical_direction)
+    D_data.push(+results[e].Engine_body_vibration_at_fore_top_vertical_direction.toFixed(8))
 }
 let E_data = []; 
 for(let e in results ){
-    E_data.push(results[e].Engine_body_vibration_at_aft_top_transverse_direction)
+    E_data.push(+results[e].Engine_body_vibration_at_aft_top_transverse_direction.toFixed(8))
 }
 
 // A_data = kf.filterAll(A_data)
@@ -174,6 +174,9 @@ data.forEach((data, index) => {
     for(let el in title){
     let tit = title[el]
     // console.log(data[tit])
+    if(el === "2"){
+        newLine.push(new Date())
+    }
     newLine.push(data[tit])
     }
     writeStream.write(newLine.join(',')+ '\r\n', () => {
