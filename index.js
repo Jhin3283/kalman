@@ -10,15 +10,16 @@ let Filename = `/kmou_dataset003`
 let DownName = `/kalman_dataset003`
 let SaveDir = `./kmou_003_filter`
 
-for(let i=0; i<=138; i++){
-    new Promise((resolve, reject) => {
-        setTimeout(() => {
-            A(i);
-        }, 1000);          
-    })
-    .then((data) => {
-    	console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    });
+for(let i=10; i<=20; i++){
+    // new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         A(i);
+    //     }, 1000);          
+    // })
+    // .then((data) => {
+    // 	console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    // });
+    (A(i))
 }
 
 // async function makeCSV (results) {
@@ -133,9 +134,9 @@ for (let i in results){
 // }
 // console.log(results.slice(0,5))
 
+await CSV(results,num)
 // // await makeCSV(results)
 console.log(`Kalman ${FILE_NAME} ... done`)
-await CSV(results,num)
 }
 
 
@@ -163,7 +164,7 @@ async function CSV (data,i){
     // })
     let writeStream = fs.createWriteStream(`${SaveDir}${DownName}_${i}.csv`)
     console.log(title)
-data.forEach((data, index) => {
+await (data.forEach((data, index) => {
     let newLine = []
     if(index === 0){
         newLine.push(title)
@@ -175,7 +176,7 @@ data.forEach((data, index) => {
     let tit = title[el]
     // console.log(data[tit])
     if(el === "2"){
-        newLine.push(new Date())
+        newLine.push(new Date().toISOString())
     }
     newLine.push(data[tit])
     }
@@ -183,7 +184,7 @@ data.forEach((data, index) => {
         // a line was written to stream
     })
 }
-})
+}))
 
 writeStream.end()
 
